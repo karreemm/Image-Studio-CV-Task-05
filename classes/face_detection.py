@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 class FaceDetector:
-    def __init__(self, cascade_path=None):
+    def __init__(self):
         """
         Initialize the face detector with a Haar Cascade Classifier.
         
@@ -10,9 +10,9 @@ class FaceDetector:
             cascade_path (str, optional): Path to the Haar Cascade XML file.
                 If None, uses the default face cascade classifier.
         """
-        if cascade_path is None:
-            # Use the default face cascade classifier that comes with OpenCV
-            cascade_path = cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
+        
+        # Use the default face cascade classifier that comes with OpenCV
+        cascade_path = cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
         
         self.face_cascade_classifier = cv2.CascadeClassifier(cascade_path)
         

@@ -17,7 +17,7 @@ class Image():
         '''
         try:
             options = QFileDialog.Options()
-            file_path, _ = QFileDialog.getOpenFileName(None, "Select Image", "", "Image Files (*.jpg *.jpeg *.png *.bmp *.gif *.tif)", options=options)
+            file_path, _ = QFileDialog.getOpenFileName(None, "Select Image", "", "Image Files (*.jpg *.jpeg *.png *.bmp *.gif *.tif *.pgm)", options=options)
             if file_path:
                 self.input_image = cv2.imread(file_path)
                 self.input_image = cv2.cvtColor(self.input_image, cv2.COLOR_BGR2RGB)

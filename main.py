@@ -37,7 +37,7 @@ class MainWindow(QMainWindow):
         self.output_image_label.setScaledContents(True)
         
         # Face detection button
-        self.face_detection_button = self.findChild(QPushButton, 'detectFaces')
+        self.face_detection_button = self.findChild(QPushButton, 'pushButton_2')
         self.face_detection_button.clicked.connect(self.detect_faces)
 
         # Controller
