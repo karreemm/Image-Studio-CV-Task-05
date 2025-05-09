@@ -4,5 +4,7 @@
     <file>..\icons_setup\icons\logo.png</file>
     <file>..\icons_setup\icons\browse.png</file>
     <file>..\icons_setup\icons\reset.png</file>
+    <file>..\icons_setup\icons\face-recognization.png</file>
+    <file>..\icons_setup\icons\face-detection.png</file>
   </qresource>
 </RCC>
