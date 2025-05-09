@@ -1,0 +1,8 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+  <qresource>
+    <file>..\icons_setup\icons\logo.png</file>
+    <file>..\icons_setup\icons\browse.png</file>
+    <file>..\icons_setup\icons\reset.png</file>
+  </qresource>
+</RCC>
