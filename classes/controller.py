@@ -1,5 +1,6 @@
 from classes.face_detection import FaceDetector
 from classes.image import Image
+from classes.face_recognition import FaceRecognition
 from PyQt5.QtGui import QImage , QPixmap
 import cv2
 
@@ -9,6 +10,7 @@ class Controller:
         self.input_image = Image()
         self.input_image_label = input_image_label
         self.output_image_label = output_image_label
+        self.face_recogniser = FaceRecognition()
 
     def browse_input_image(self):
         if(self.input_image.select_image()):
@@ -21,6 +23,11 @@ class Controller:
             cv2.rectangle(self.input_image.output_image, (x, y), (x+w, y+h), (0, 255, 0), 2)
         self.output_image_label.setPixmap(self.numpy_to_qpixmap(self.input_image.output_image))
 
+    
+    def recognize_faces(self):
+        faces = self.input_image.input_image
+        matched_faces,confidance = self.face_recogniser.recognize_face(faces,threshold=0.6)
+        self.output_image_label.setPixmap(self.numpy_to_qpixmap(matched_faces))
     
     def numpy_to_qpixmap(self, image_array):
         """Convert NumPy array (RGB or Grayscale) to QPixmap."""

@@ -40,16 +40,25 @@ class MainWindow(QMainWindow):
         self.face_detection_button = self.findChild(QPushButton, 'pushButton_2')
         self.face_detection_button.clicked.connect(self.detect_faces)
 
+        # Face recognition button
+        self.face_recognition_button = self.findChild(QPushButton, 'recognizeFaces')
+        self.face_recognition_button.clicked.connect(self.recognize_faces)
+        
         # Controller
         self.controller = Controller(self.input_image_label, self.output_image_label)
     
-    
+        # construct eigenfaces space
+        self.controller.face_recogniser.construct_eigenfaces_space()
+
     def browse_image(self):
         self.controller.browse_input_image()
     
     def detect_faces(self):
         self.controller.detect_faces()
-    
+        
+    def recognize_faces(self):
+        self.controller.recognize_faces()
+        
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     window = MainWindow()
