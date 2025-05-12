@@ -20,6 +20,55 @@ class FaceRecognition:
         self.training_faces = None
         self.not_found_image = np.zeros((64, 64), dtype=np.uint8)  # for not found image
     
+    def save_model(self, filepath='trained_model.pkl'):
+        """
+        Save the trained model to a pickle file.
+        
+        Args:
+            filepath (str): Path where the model will be saved
+        """
+        model_data = {
+            'n_components': self.n_components,
+            'dataset_images': self.dataset_images,
+            'flattened_dataset': self.flattened_dataset,
+            'mean_face': self.mean_face,
+            'eigenfaces': self.eigenfaces,
+            'dataset_projections': self.dataset_projections,
+            'training_faces': self.training_faces
+        }
+        
+        with open(filepath, 'wb') as f:
+            pickle.dump(model_data, f)
+        print(f"Model saved successfully to {filepath}")
+    
+    def load_model(self, filepath='trained_model.pkl'):
+        """
+        Load a trained model from a pickle file.
+        
+        Args:
+            filepath (str): Path to the saved model file
+            
+        Returns:
+            bool: True if model loaded successfully, False otherwise
+        """
+        try:
+            with open(filepath, 'rb') as f:
+                model_data = pickle.load(f)
+            
+            self.n_components = model_data['n_components']
+            self.dataset_images = model_data['dataset_images']
+            self.flattened_dataset = model_data['flattened_dataset']
+            self.mean_face = model_data['mean_face']
+            self.eigenfaces = model_data['eigenfaces']
+            self.dataset_projections = model_data['dataset_projections']
+            self.training_faces = model_data['training_faces']
+            
+            print(f"Model loaded successfully from {filepath}")
+            return True
+        except Exception as e:
+            print(f"Error loading model: {str(e)}")
+            return False
+    
     def construct_eigenfaces_space(self):
         self.read_dataset()
         if not self.dataset_images:
@@ -31,7 +80,7 @@ class FaceRecognition:
         
         
     def read_dataset(self):
-        dataset_path = "D:\\Projects\\Computer Vision\\Task 05\\Image-Studio-CV-Task-05\\Images_Dataset\\train_data\\merged_train_data"
+        dataset_path = "./Images_Dataset/train_data/merged_train_data"
         
         for file_name in os.listdir(dataset_path):
             file_path = os.path.join(dataset_path, file_name)

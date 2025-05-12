@@ -3,6 +3,7 @@ from classes.image import Image
 from classes.face_recognition import FaceRecognition
 from PyQt5.QtGui import QImage , QPixmap
 import cv2
+import os
 
 class Controller:
     def __init__(self , input_image_label , output_image_label):
@@ -11,6 +12,18 @@ class Controller:
         self.input_image_label = input_image_label
         self.output_image_label = output_image_label
         self.face_recogniser = FaceRecognition()
+        
+        # Try to load the saved model, if it doesn't exist, train a new one
+        if not os.path.exists('trained_model.pkl'):
+            print("No saved model found. Training new model...")
+            self.face_recogniser.construct_eigenfaces_space()
+            self.face_recogniser.save_model()
+        else:
+            print("Loading saved model...")
+            if not self.face_recogniser.load_model():
+                print("Error loading model. Training new model...")
+                self.face_recogniser.construct_eigenfaces_space()
+                self.face_recogniser.save_model()
 
     def browse_input_image(self):
         if(self.input_image.select_image()):

@@ -54,9 +54,6 @@ class MainWindow(QMainWindow):
 
         # Controller
         self.controller = Controller(self.input_image_label, self.output_image_label)
-    
-        # construct eigenfaces space
-        self.controller.face_recogniser.construct_eigenfaces_space()
 
     def browse_image(self):
         self.controller.browse_input_image()
