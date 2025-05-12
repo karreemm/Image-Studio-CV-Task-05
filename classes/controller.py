@@ -3,8 +3,6 @@ from classes.image import Image
 from classes.face_recognition import FaceRecognition
 from PyQt5.QtGui import QImage, QPixmap
 import cv2
-<<<<<<< HEAD
-=======
 import time
 import numpy as np
 import matplotlib.pyplot as plt
@@ -12,7 +10,6 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from PyQt5.QtWidgets import QVBoxLayout, QSizePolicy
 import matplotlib
 matplotlib.use('Qt5Agg')
->>>>>>> 610cc3a63583d84791024d501eb7113c3dfe98cb
 import os
 
 class Controller:
@@ -22,7 +19,7 @@ class Controller:
         self.input_image_label = input_image_label
         self.output_image_label = output_image_label
         self.face_recogniser = FaceRecognition()
-<<<<<<< HEAD
+
         
         # Try to load the saved model, if it doesn't exist, train a new one
         if not os.path.exists('trained_model.pkl'):
@@ -35,7 +32,6 @@ class Controller:
                 print("Error loading model. Training new model...")
                 self.face_recogniser.construct_eigenfaces_space()
                 self.face_recogniser.save_model()
-=======
         self.performance_labels = {
             'mostMatchedScore': None,
             'time': None
@@ -48,7 +44,6 @@ class Controller:
         
     def set_roc_frame(self, roc_frame):
         self.roc_frame = roc_frame
->>>>>>> 610cc3a63583d84791024d501eb7113c3dfe98cb
 
     def browse_input_image(self):
         if(self.input_image.select_image()):
