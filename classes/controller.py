@@ -44,6 +44,7 @@ class Controller:
         
     def set_roc_frame(self, roc_frame):
         self.roc_frame = roc_frame
+    
 
     def browse_input_image(self):
         if(self.input_image.select_image()):

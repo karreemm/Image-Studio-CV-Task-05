@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1287</width>
+    <width>1161</width>
     <height>1331</height>
    </rect>
   </property>
@@ -78,36 +78,7 @@ QToolTip {
     font-size: 14px;
 }
 
-/* Sliders */
-QSlider::groove:horizontal {
-    border: 1px solid #ffffff;   /* Updated white border */
-    height: 8px;
-    background: #0f1729;
-    border-radius: 4px;
-}
 
-QSlider::handle:horizontal {
-    background: #ffffff;         /* Updated white handle */
-    border: 1px solid #e1e8f0;   /* White border around handle */
-    width: 20px;
-    height: 20px;
-    border-radius: 10px;
-    margin: -7px 0;
-}
-
-QSlider::sub-page:horizontal {
-    background: #ffffff;         /* Updated white for sub-page */
-    border: 1px solid #ffffff;   /* White border for sub-page */
-    height: 8px;
-    border-radius: 4px;
-}
-
-QSlider::add-page:horizontal {
-    background: #0f1729;
-    border: 1px solid #ffffff;   /* White border for add-page */
-    height: 8px;
-    border-radius: 4px;
-}
 
 
 </string>
@@ -447,6 +418,159 @@ QPushButton:hover {
       <property name="spacing">
        <number>25</number>
       </property>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <property name="spacing">
+         <number>20</number>
+        </property>
+        <property name="topMargin">
+         <number>10</number>
+        </property>
+        <property name="bottomMargin">
+         <number>10</number>
+        </property>
+        <item>
+         <spacer name="verticalSpacer_4">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_7">
+          <item>
+           <widget class="QLabel" name="label_5">
+            <property name="styleSheet">
+             <string notr="true">border: none;
+font-size: 25px;
+font-weight: bold;</string>
+            </property>
+            <property name="text">
+             <string>Recognization Threshold:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="threshold">
+            <property name="styleSheet">
+             <string notr="true">border: none;
+font-size: 25px;
+font-weight: bold;</string>
+            </property>
+            <property name="text">
+             <string>0.5</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_6">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_9">
+          <item>
+           <widget class="QSlider" name="slider">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>400</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>400</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">/* For vertical sliders */
+QSlider::groove:vertical {
+    border: 1px solid #ffffff;
+    width: 8px;  /* Width instead of height for vertical */
+    background: #0f1729;
+    border-radius: 4px;
+}
+
+QSlider::handle:vertical {
+    background: #ffffff;
+    border: 1px solid #e1e8f0;
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    margin: 0 -7px;  /* Horizontal margin instead of vertical */
+}
+
+QSlider::sub-page:vertical {
+    background: #0f1729;  /* Usually inverse of horizontal */
+    border: 1px solid #ffffff;
+    width: 8px;
+    border-radius: 4px;
+}
+
+QSlider::add-page:vertical {
+    background: #ffffff;  /* Usually inverse of horizontal */
+    border: 1px solid #ffffff;
+    width: 8px;
+    border-radius: 4px;
+}</string>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>10</number>
+            </property>
+            <property name="value">
+             <number>5</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_5">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_5">
         <item>
