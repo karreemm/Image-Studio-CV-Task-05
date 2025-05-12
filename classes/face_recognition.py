@@ -4,7 +4,7 @@ import pickle
 import os
 
 class FaceRecognition:
-    def __init__(self, n_components=10):
+    def __init__(self, n_components=5):
         """
         Initialize the FaceRecognition class.
         
@@ -18,7 +18,9 @@ class FaceRecognition:
         self.eigenfaces = None
         self.dataset_projections = None
         self.training_faces = None
-        self.not_found_image = np.zeros((64, 64), dtype=np.uint8)  # for not found image
+        self.not_found_image = cv2.imread("./Final Test Data/not found.png")
+        self.not_found_image = cv2.cvtColor(self.not_found_image, cv2.COLOR_BGR2RGB)
+        self.labels = set()
     
     def save_model(self, filepath='trained_model.pkl'):
         """
@@ -84,6 +86,10 @@ class FaceRecognition:
         
         for file_name in os.listdir(dataset_path):
             file_path = os.path.join(dataset_path, file_name)
+
+            label = file_name[0]
+            print(f"label: {label}")
+            self.labels.add(label)
             
             # Make sure it's a file (skip directories if any)
             if os.path.isfile(file_path):
@@ -163,7 +169,7 @@ class FaceRecognition:
         return np.dot(centered_face, self.eigenfaces)  # 1 x 10
 
         
-    def recognize_face(self, face_img, threshold=0.6):
+    def recognize_face(self, face_img, threshold=0.9):
         """
         Recognize a face using the trained model.
         
@@ -174,6 +180,10 @@ class FaceRecognition:
         Returns:
              predicted face, confidence_score
         """
+
+        # isFound
+        isFound = False
+
         # Preprocess the input face
         processed_face = self.preprocess_face(face_img)
         
@@ -189,7 +199,75 @@ class FaceRecognition:
         
         if confidence >= threshold:
             print(f"confidence: {confidence}")
-
-            return self.dataset_images[min_distance_idx], confidence
+            isFound = True
+            print(f"state: {isFound}")
+            return self.dataset_images[min_distance_idx], confidence, isFound
         else:
-            return self.not_found_image, confidence
+            print(f"confidence: {confidence}")
+            isFound = False
+            print(f"state: {isFound}")
+            return self.not_found_image, confidence, isFound
+        
+    def get_roc_params(self):
+        """
+        Get the positive and negative images in the test data.
+        
+        Returns:
+            tuple: Positive and negative images
+        """
+        false_positives = 0
+        true_positives = 0
+        true_negatives = 0
+        false_negatives = 0
+        
+        path = "./Images_Dataset/test_data/merged_test_data"
+
+        for file_name in os.listdir(path):
+            file_path = os.path.join(path, file_name)
+
+
+            # label
+            label = file_name[0]
+           
+            # Make sure it's a file (skip directories if any)
+            if os.path.isfile(file_path):
+                # Read the image
+                image = cv2.imread(file_path)
+                
+                # Skip if the image couldn't be read
+                if image is None:
+                    continue
+                
+                # Resize and convert to grayscale
+                resized_image = cv2.resize(image, (64, 64))
+                gray_image = cv2.cvtColor(resized_image, cv2.COLOR_BGR2GRAY)
+                
+                _, _, state = self.recognize_face(gray_image)
+                if state:
+                    if label in self.labels:
+                        true_positives += 1
+                    else:
+                        false_positives += 1
+                else:
+                    if label in self.labels:
+                        false_negatives += 1
+                    else:
+                        true_negatives += 1
+
+        return true_positives, true_negatives, false_positives, false_negatives
+    
+    def roc_params(self):
+        """
+        Calculate the ROC parameters.
+        
+        Returns:
+            tuple: True positive rate, false positive rate
+        """
+        true_positives, true_negatives, false_positives, false_negatives = self.get_roc_params()
+        print(f"TP: {true_positives}, TN: {true_negatives}, FP: {false_positives}, FN: {false_negatives}")
+        
+        # Calculate true positive rate (TPR) and false positive rate (FPR)
+        tpr = true_positives / (true_positives + false_negatives)
+        fpr = false_positives / (false_positives + true_negatives)
+        
+        return tpr, fpr

@@ -76,7 +76,7 @@ class Controller:
         start_time = time.time()
         
         faces = self.input_image.input_image
-        matched_face, confidence = self.face_recogniser.recognize_face(faces, threshold=0.6)
+        matched_face, confidence, _ = self.face_recogniser.recognize_face(faces)
         
         # Calculate elapsed time
         elapsed_time = time.time() - start_time
@@ -95,100 +95,11 @@ class Controller:
     
     def generate_roc_curve(self):
         """
-        Generate ROC curve using the face recognition model
+        Generate ROC curve using the face recognition model and face_recogniser.roc_params
         """
-        def generate_test_data():
-            """
-            Generate test faces and labels from a test dataset
-            """
-            test_faces = []
-            labels = []
-            
-            # Path to test dataset (adjust this to your actual test dataset path)
-            test_dataset_path = "D:\\Projects\\Computer Vision\\Task 05\\Image-Studio-CV-Task-05\\Images_Dataset\\test_data"
-            
-            # Add this to your generate_test_data function for debugging
-            test_directories = os.listdir(test_dataset_path)
-            print(f"Available test directories: {test_directories}")
-            
-            # Iterate through test dataset
-            for label_dir in os.listdir(test_dataset_path):
-                label_path = os.path.join(test_dataset_path, label_dir)
-                
-                if os.path.isdir(label_path):
-                    for file_name in os.listdir(label_path):
-                        file_path = os.path.join(label_path, file_name)
-                        
-                        # Read the image
-                        image = cv2.imread(file_path)
-                        
-                        # Skip if the image couldn't be read
-                        if image is None:
-                            continue
-                        
-                        # Resize and convert to grayscale
-                        resized_image = cv2.resize(image, (64, 64))
-                        gray_image = cv2.cvtColor(resized_image, cv2.COLOR_BGR2GRAY)
-                        
-                        test_faces.append(gray_image)
-                        
-                        # Use identity labels from directory names
-                        labels.append(1 if label_dir in ['positive', 'known_faces', 'trained_faces'] else 0)
-            
-            print(f"Found {len(test_faces)} test faces")
-            print(f"Labels distribution: {sum(labels)} positive, {len(labels)-sum(labels)} negative")
-            return test_faces, labels
-        
-        # Ensure eigenfaces space is constructed
-        if not hasattr(self.face_recogniser, 'dataset_projections') or self.face_recogniser.dataset_projections is None:
-            self.face_recogniser.construct_eigenfaces_space()
-        
-        # Generate test data
-        test_faces, labels = generate_test_data()
-        
-        if not test_faces:
-            print("No test faces found. Generating sample ROC curve.")
-            # Fallback to sample data if no test faces
-            thresholds = np.linspace(0, 1, 100)
-            tpr = [1 - np.exp(-(threshold/0.6)**2) for threshold in thresholds]
-            fpr = [np.exp(-((1-threshold)/0.3)**2) for threshold in thresholds]
-        else:
-            # Calculate ROC curve data
-            thresholds = np.linspace(0, 1, 100)
-            tpr = []
-            fpr = []
-            
-            # Preprocess and project test faces
-            processed_faces = [self.face_recogniser.preprocess_face(face) for face in test_faces]
-            face_projections = [self.face_recogniser.project_face(face) for face in processed_faces]
-            
-            # Calculate distances to all training faces for each test face
-            test_distances = []
-            for face_projection in face_projections:
-                distances = np.linalg.norm(self.face_recogniser.dataset_projections - face_projection, axis=1)
-                test_distances.append(distances)
-            
-            # Compute ROC curve
-            for threshold in thresholds:
-                # Predictions for this threshold
-                predictions = []
-                for i, distances in enumerate(test_distances):
-                    min_distance_idx = np.argmin(distances)
-                    confidence = 1 - (distances[min_distance_idx] / np.max(distances))
-                    
-                    # Decide prediction based on confidence threshold
-                    prediction = 1 if confidence >= threshold else 0
-                    predictions.append(prediction)
-                
-                # Calculate True Positive Rate and False Positive Rate
-                true_positives = sum((p == 1 and l == 1) for p, l in zip(predictions, labels))
-                false_positives = sum((p == 1 and l == 0) for p, l in zip(predictions, labels))
-                true_negatives = sum((p == 0 and l == 0) for p, l in zip(predictions, labels))
-                false_negatives = sum((p == 0 and l == 1) for p, l in zip(predictions, labels))
-                
-                # Calculate TPR and FPR
-                tpr.append(true_positives / (true_positives + false_negatives) if (true_positives + false_negatives) > 0 else 0)
-                fpr.append(false_positives / (false_positives + true_negatives) if (false_positives + true_negatives) > 0 else 0)
+        # Get TPR and FPR directly from face_recogniser.roc_params
+        tpr, fpr = self.face_recogniser.roc_params()
+        print(f"TPR: {tpr}, FPR: {fpr}")
         
         # Create the figure and canvas with a specific background color
         figure = plt.figure(figsize=(6, 5), dpi=100, facecolor='#1E293B', tight_layout=True)
@@ -223,7 +134,7 @@ class Controller:
             spine.set_edgecolor('white')
 
         # Calculate AUC
-        auc = np.trapz(tpr, fpr)
+        auc = np.trapz([tpr], [fpr])
 
         # Add AUC text with custom styling at top left
         ax.text(0.02, 0.98, 
