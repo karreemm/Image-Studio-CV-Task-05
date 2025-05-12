@@ -307,5 +307,6 @@ class FaceRecognition:
             # Add to lists
             tpr_list.append(tpr)
             fpr_list.append(fpr)
-        
+        print(tpr_list)
+        print(fpr_list)
         return tpr_list, fpr_list

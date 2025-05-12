@@ -131,16 +131,19 @@ class Controller:
             spine.set_edgecolor('white')
 
         # Calculate AUC
-        auc = np.abs(np.trapezoid(tpr, fpr))
+        auc = 0
+        for i in range(1, len(fpr)):
+            auc += (fpr[i] - fpr[i-1]) * (tpr[i] + tpr[i-1]) / 2
+        auc = abs(auc)
 
         # Add AUC text with custom styling at top left
-        ax.text(0.02, 0.98, 
+        ax.text(0.5, 0.5, 
                 f'Area Under Curve (AUC) = {auc:.3f}', 
                 color='white', 
                 fontsize=12, 
                 fontweight='bold', 
-                horizontalalignment='left',
-                verticalalignment='top',
+                horizontalalignment='center',
+                verticalalignment='center',
                 transform=ax.transAxes,
                 bbox=dict(facecolor='#334155', edgecolor='white', alpha=0.7, boxstyle='round,pad=0.5'))
 

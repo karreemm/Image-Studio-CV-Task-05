@@ -42,23 +42,4 @@ class FaceDetector:
         
         return faces
     
-    # def draw_faces(self, image, faces, color=(0, 255, 0), thickness=2):
-    #     """
-    #     Draw rectangles around detected faces.
-        
-    #     Args:
-    #         image (numpy.ndarray): Input image in BGR format
-    #         faces (list): List of rectangles (x, y, w, h) where faces are detected
-    #         color (tuple): BGR color for the rectangle
-    #         thickness (int): Thickness of the rectangle border
-            
-    #     Returns:
-    #         numpy.ndarray: Image with rectangles drawn around faces
-    #     """
-    #     image_with_faces = image.copy()
-        
-    #     for (x, y, w, h) in faces:
-    #         cv2.rectangle(image_with_faces, (x, y), (x+w, y+h), color, thickness)
-            
-    #     return image_with_faces
     
