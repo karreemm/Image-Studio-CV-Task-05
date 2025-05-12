@@ -663,6 +663,12 @@ border-radius: 10px
           </item>
           <item>
            <widget class="QFrame" name="performanceFrame">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="minimumSize">
              <size>
               <width>400</width>
@@ -734,47 +740,6 @@ font-weight: bold;</string>
                 <number>20</number>
                </property>
                <item>
-                <layout class="QHBoxLayout" name="horizontalLayout_6">
-                 <item>
-                  <widget class="QLabel" name="label_6">
-                   <property name="styleSheet">
-                    <string notr="true">font-size: 20px;
-font-weight: bold;
-margin-left: 100px</string>
-                   </property>
-                   <property name="text">
-                    <string>Accurecy: </string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLabel" name="accurecy">
-                   <property name="styleSheet">
-                    <string notr="true">font-size: 20px;
-font-weight: bold;</string>
-                   </property>
-                   <property name="text">
-                    <string>90</string>
-                   </property>
-                   <property name="alignment">
-                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLabel" name="label_5">
-                   <property name="styleSheet">
-                    <string notr="true">font-size: 20px;
-font-weight: bold;</string>
-                   </property>
-                   <property name="text">
-                    <string>%</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
-               <item>
                 <layout class="QHBoxLayout" name="horizontalLayout_8">
                  <item>
                   <widget class="QLabel" name="label_10">
@@ -796,7 +761,7 @@ font-weight: bold;
 margin-left: 50px</string>
                    </property>
                    <property name="text">
-                    <string>3.344</string>
+                    <string>None</string>
                    </property>
                    <property name="alignment">
                     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -826,7 +791,7 @@ margin-left: 100px</string>
 font-weight: bold;</string>
                    </property>
                    <property name="text">
-                    <string>4500</string>
+                    <string>None</string>
                    </property>
                    <property name="alignment">
                     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -840,7 +805,7 @@ font-weight: bold;</string>
 font-weight: bold;</string>
                    </property>
                    <property name="text">
-                    <string>mSec</string>
+                    <string>Seconds</string>
                    </property>
                   </widget>
                  </item>
