@@ -31,7 +31,7 @@ class FaceRecognition:
         
         
     def read_dataset(self):
-        dataset_path = "D:\\Computer Vision\\Image-Studio-CV-Task-05\\Images_Dataset\\train_data\\merged_train_data"
+        dataset_path = "D:\\Projects\\Computer Vision\\Task 05\\Image-Studio-CV-Task-05\\Images_Dataset\\train_data\\merged_train_data"
         
         for file_name in os.listdir(dataset_path):
             file_path = os.path.join(dataset_path, file_name)

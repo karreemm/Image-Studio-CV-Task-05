@@ -216,8 +216,11 @@ QSlider::add-page:horizontal {
               <height>70</height>
              </size>
             </property>
-            <property name="statusTip">
+            <property name="toolTip">
              <string>Detect Faces</string>
+            </property>
+            <property name="statusTip">
+             <string/>
             </property>
             <property name="text">
              <string/>
@@ -248,8 +251,11 @@ QSlider::add-page:horizontal {
               <height>70</height>
              </size>
             </property>
-            <property name="statusTip">
+            <property name="toolTip">
              <string>Recognize a Face</string>
+            </property>
+            <property name="statusTip">
+             <string/>
             </property>
             <property name="text">
              <string/>
@@ -783,7 +789,7 @@ margin-left: 100px</string>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QLabel" name="label_9">
+                  <widget class="QLabel" name="mostMatchedScore">
                    <property name="styleSheet">
                     <string notr="true">font-size: 20px;
 font-weight: bold;

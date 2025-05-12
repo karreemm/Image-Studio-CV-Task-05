@@ -44,6 +44,14 @@ class MainWindow(QMainWindow):
         self.face_recognition_button = self.findChild(QPushButton, 'recognizeFaces')
         self.face_recognition_button.clicked.connect(self.recognize_faces)
         
+        # ROC Frame
+        self.rocFrame = self.findChild(QFrame, 'rocFrame')
+
+        # Performance Matrices
+        self.accurecy = self.findChild(QLabel, 'accuracy')
+        self.mostMatchedScore = self.findChild(QLabel, 'mostMatchedScore')
+        self.time = self.findChild(QLabel, 'time')
+
         # Controller
         self.controller = Controller(self.input_image_label, self.output_image_label)
     
