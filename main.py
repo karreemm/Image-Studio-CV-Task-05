@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QFrame, QLabel, QVBoxLayout
+from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QFrame, QLabel, QVBoxLayout, QSlider
 from PyQt5.uic import loadUi
 from PyQt5.QtGui import QIcon
 from helper_functions.compile_qrc import compile_qrc
@@ -52,6 +52,13 @@ class MainWindow(QMainWindow):
         self.mostMatchedScore = self.findChild(QLabel, 'mostMatchedScore')
         self.time = self.findChild(QLabel, 'time')
 
+        # threshold
+        self.threshold = self.findChild(QLabel, 'threshold')
+
+        # slider
+        self.slider = self.findChild(QSlider, 'slider')
+        self.slider.valueChanged.connect(self.update_threshold)
+
         # Controller
         self.controller = Controller(self.input_image_label, self.output_image_label)
         
@@ -72,6 +79,12 @@ class MainWindow(QMainWindow):
         
     def recognize_faces(self):
         self.controller.recognize_faces()
+    
+    def update_threshold(self):
+        
+        value = self.slider.value() * 0.1
+        self.threshold.setText(f"{value:.1f}")
+        self.controller.face_recogniser.set_threshold(value)
         
 if __name__ == '__main__':
     app = QApplication(sys.argv)

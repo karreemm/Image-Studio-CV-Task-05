@@ -21,6 +21,7 @@ class FaceRecognition:
         self.not_found_image = cv2.imread("./Final Test Data/not found.png")
         self.not_found_image = cv2.cvtColor(self.not_found_image, cv2.COLOR_BGR2RGB)
         self.labels = set()
+        self.threshold = 0.9
     
     def save_model(self, filepath='trained_model.pkl'):
         """
@@ -168,8 +169,12 @@ class FaceRecognition:
         centered_face = face - self.mean_face   # 4096 x 1
         return np.dot(centered_face, self.eigenfaces)  # 1 x 10
 
+    def set_threshold(self, threshold):
+        self.threshold = threshold
         
-    def recognize_face(self, face_img, threshold=0.9):
+    def recognize_face(self, face_img, threshold=None):
+        if threshold is None:
+            threshold = self.threshold
         """
         Recognize a face using the trained model.
         
