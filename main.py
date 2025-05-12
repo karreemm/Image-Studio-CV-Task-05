@@ -60,7 +60,7 @@ class MainWindow(QMainWindow):
         
         # Set ROC frame in the controller
         self.controller.set_roc_frame(self.rocFrame)
-    
+        self.controller.generate_roc_curve()
         # construct eigenfaces space
         # self.controller.face_recogniser.construct_eigenfaces_space()
 

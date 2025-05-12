@@ -88,7 +88,6 @@ class FaceRecognition:
             file_path = os.path.join(dataset_path, file_name)
 
             label = file_name[0]
-            print(f"label: {label}")
             self.labels.add(label)
             
             # Make sure it's a file (skip directories if any)
@@ -178,7 +177,7 @@ class FaceRecognition:
             threshold: Similarity threshold for recognition
             
         Returns:
-             predicted face, confidence_score
+            predicted face, confidence_score
         """
 
         # isFound
@@ -208,66 +207,100 @@ class FaceRecognition:
             print(f"state: {isFound}")
             return self.not_found_image, confidence, isFound
         
-    def get_roc_params(self):
+    
+    def get_roc_params(self, threshold_min=0.0, threshold_max=1.0, threshold_step=0.05):
         """
-        Get the positive and negative images in the test data.
+        Calculate ROC curve parameters.
+        
+        Args:
+            threshold_min: Minimum threshold value 
+            threshold_max: Maximum threshold value 
+            threshold_step: Step size for threshold values
         
         Returns:
-            tuple: Positive and negative images
+            tuple: TPR list, FPR list
         """
-        false_positives = 0
-        true_positives = 0
-        true_negatives = 0
-        false_negatives = 0
+        dataset_path = "./Images_Dataset/train_data/merged_train_data"
         
+        for file_name in os.listdir(dataset_path):
+            file_path = os.path.join(dataset_path, file_name)
+            label_train = file_name[0]
+            self.labels.add(label_train)
+            
         path = "./Images_Dataset/test_data/merged_test_data"
-
+        
+        # First, collect all predictions with their confidences and true labels
+        all_predictions = []
+        
         for file_name in os.listdir(path):
             file_path = os.path.join(path, file_name)
-
-
-            # label
-            label = file_name[0]
-           
-            # Make sure it's a file (skip directories if any)
-            if os.path.isfile(file_path):
-                # Read the image
-                image = cv2.imread(file_path)
+                        
+            # Extract label from filename
+            label = file_name[0]  
+            
+            true_label = 1 if label in self.labels else 0  # Convert to binary
+            
+            # Skip directories
+            if not os.path.isfile(file_path):
+                continue
                 
-                # Skip if the image couldn't be read
-                if image is None:
-                    continue
+            # Read and preprocess image
+            image = cv2.imread(file_path)
+            if image is None:
+                continue
                 
-                # Resize and convert to grayscale
-                resized_image = cv2.resize(image, (64, 64))
-                gray_image = cv2.cvtColor(resized_image, cv2.COLOR_BGR2GRAY)
+            # Resize and convert to grayscale
+            resized_image = cv2.resize(image, (64, 64))
+            gray_image = cv2.cvtColor(resized_image, cv2.COLOR_BGR2GRAY)
+            
+            # Get prediction confidence
+            _, confidence, _ = self.recognize_face(gray_image)
+            
+            # Store prediction data
+            all_predictions.append((confidence, true_label))
+        
+        # Track counts
+        total_positives = sum(1 for _, label in all_predictions if label == 1)
+        total_negatives = sum(1 for _, label in all_predictions if label == 0)
+        
+        # If no positives or negatives, return empty lists
+        if total_positives == 0 or total_negatives == 0:
+            return [], []
+        
+        # Generate threshold values
+        thresholds = np.arange(threshold_min, threshold_max + threshold_step/2, threshold_step)
+        
+        # Initialize lists for results
+        tpr_list = []
+        fpr_list = []
+        
+        # For each threshold, calculate TPR and FPR
+        for threshold in thresholds:
+            true_positives = 0
+            false_positives = 0
+            true_negatives = 0
+            false_negatives = 0
+            
+            # Classify each example based on current threshold
+            for confidence, true_label in all_predictions:
+                # Predicted label is positive if confidence >= threshold
+                predicted_label = 1 if confidence >= threshold else 0
                 
-                _, _, state = self.recognize_face(gray_image)
-                if state:
-                    if label in self.labels:
-                        true_positives += 1
-                    else:
-                        false_positives += 1
-                else:
-                    if label in self.labels:
-                        false_negatives += 1
-                    else:
-                        true_negatives += 1
-
-        return true_positives, true_negatives, false_positives, false_negatives
-    
-    def roc_params(self):
-        """
-        Calculate the ROC parameters.
+                if predicted_label == 1 and true_label == 1:
+                    true_positives += 1
+                elif predicted_label == 1 and true_label == 0:
+                    false_positives += 1
+                elif predicted_label == 0 and true_label == 1:
+                    false_negatives += 1
+                else:  # predicted_label == 0 and true_label == 0
+                    true_negatives += 1
+            
+            # Calculate rates
+            tpr = true_positives / total_positives if total_positives > 0 else 0
+            fpr = false_positives / total_negatives if total_negatives > 0 else 0
+            
+            # Add to lists
+            tpr_list.append(tpr)
+            fpr_list.append(fpr)
         
-        Returns:
-            tuple: True positive rate, false positive rate
-        """
-        true_positives, true_negatives, false_positives, false_negatives = self.get_roc_params()
-        print(f"TP: {true_positives}, TN: {true_negatives}, FP: {false_positives}, FN: {false_negatives}")
-        
-        # Calculate true positive rate (TPR) and false positive rate (FPR)
-        tpr = true_positives / (true_positives + false_negatives)
-        fpr = false_positives / (false_positives + true_negatives)
-        
-        return tpr, fpr
+        return tpr_list, fpr_list

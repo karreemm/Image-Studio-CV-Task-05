@@ -89,18 +89,14 @@ class Controller:
             self.performance_labels['mostMatchedScore'].setText(f"{confidence:.4f}")
         
         self.output_image_label.setPixmap(self.numpy_to_qpixmap(matched_face))
-        
-        # Generate and display ROC curve
-        self.generate_roc_curve()
-    
+            
     def generate_roc_curve(self):
         """
         Generate ROC curve using the face recognition model and face_recogniser.roc_params
         """
         # Get TPR and FPR directly from face_recogniser.roc_params
-        tpr, fpr = self.face_recogniser.roc_params()
+        tpr, fpr = self.face_recogniser.get_roc_params()
         print(f"TPR: {tpr}, FPR: {fpr}")
-        
         # Create the figure and canvas with a specific background color
         figure = plt.figure(figsize=(6, 5), dpi=100, facecolor='#1E293B', tight_layout=True)
         canvas = FigureCanvas(figure)
@@ -134,7 +130,7 @@ class Controller:
             spine.set_edgecolor('white')
 
         # Calculate AUC
-        auc = np.trapz([tpr], [fpr])
+        auc = np.abs(np.trapezoid(tpr, fpr))
 
         # Add AUC text with custom styling at top left
         ax.text(0.02, 0.98, 
